@@ -169,6 +169,7 @@ export function ResumeBuilder() {
               <ResumePreview 
                 resumeData={resumeData}
                 template={selectedTemplate}
+                customization={customization}
               />
             </SortableContext>
           </div>

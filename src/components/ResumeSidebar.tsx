@@ -10,6 +10,8 @@ import { Plus, X, Download, Palette } from "lucide-react";
 import { ResumeData } from "../types/resume";
 import { TemplateSelector } from "./TemplateSelector";
 import { CustomizationPanel } from "./CustomizationPanel";
+import { ExperienceEditModal } from "./ExperienceEditModal";
+import { EducationEditModal } from "./EducationEditModal";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PDFResume } from "./PDFResume";
 
@@ -56,8 +58,32 @@ export function ResumeSidebar({
     }
   };
 
+  const handleUpdateExperience = (experiences: any[]) => {
+    onUpdateData({
+      sections: resumeData.sections.map(section => 
+        section.type === "experience" 
+          ? { ...section, content: { ...section.content, experiences } }
+          : section
+      )
+    });
+  };
+
+  const handleUpdateEducation = (education: any[]) => {
+    onUpdateData({
+      sections: resumeData.sections.map(section => 
+        section.type === "education" 
+          ? { ...section, content: { ...section.content, education } }
+          : section
+      )
+    });
+  };
+
   const skillsSection = resumeData.sections.find(section => section.type === "skills");
   const skills = skillsSection?.content.skills || [];
+  const experienceSection = resumeData.sections.find(section => section.type === "experience");
+  const experiences = experienceSection?.content.experiences || [];
+  const educationSection = resumeData.sections.find(section => section.type === "education");
+  const education = educationSection?.content.education || [];
 
   return (
     <div className="w-80 border-r bg-card shadow-card h-full">
@@ -158,6 +184,32 @@ export function ResumeSidebar({
                       </Badge>
                     ))}
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Experience Management */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Work Experience</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ExperienceEditModal
+                    experiences={experiences}
+                    onUpdate={handleUpdateExperience}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Education Management */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Education</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <EducationEditModal
+                    education={education}
+                    onUpdate={handleUpdateEducation}
+                  />
                 </CardContent>
               </Card>
             </TabsContent>

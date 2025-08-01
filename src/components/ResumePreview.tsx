@@ -9,14 +9,24 @@ import { cn } from "@/lib/utils";
 interface ResumePreviewProps {
   resumeData: ResumeData;
   template: string;
+  customization: {
+    fontSize: number;
+    primaryColor: string;
+    textColor: string;
+  };
 }
 
 interface SortableSectionProps {
   section: any;
   template: string;
+  customization: {
+    fontSize: number;
+    primaryColor: string;
+    textColor: string;
+  };
 }
 
-function SortableSection({ section, template }: SortableSectionProps) {
+function SortableSection({ section, template, customization }: SortableSectionProps) {
   const {
     attributes,
     listeners,
@@ -48,21 +58,30 @@ function SortableSection({ section, template }: SortableSectionProps) {
         <GripVertical className="w-4 h-4 text-muted-foreground" />
       </div>
       
-      <ResumeSection section={section} template={template} />
+      <ResumeSection section={section} template={template} customization={customization} />
     </div>
   );
 }
 
-function ResumeSection({ section, template }: { section: any; template: string }) {
+function ResumeSection({ section, template, customization }: { section: any; template: string; customization: any }) {
   const baseClasses = "mb-6";
-  const headerClasses = getTemplateHeaderClasses(template);
+  const headerClasses = getTemplateHeaderClasses(template, customization);
   const contentClasses = "mt-3";
+  
+  const textStyle = {
+    fontSize: `${customization.fontSize}px`,
+    color: customization.textColor,
+  };
+  
+  const primaryStyle = {
+    color: customization.primaryColor,
+  };
 
   switch (section.type) {
     case "skills":
       return (
         <div className={baseClasses}>
-          <h2 className={headerClasses}>{section.title}</h2>
+          <h2 className={headerClasses} style={primaryStyle}>{section.title}</h2>
           <div className={cn(contentClasses, "flex flex-wrap gap-2")}>
             {section.content.skills?.map((skill: string) => (
               <Badge key={skill} variant="secondary" className="text-xs">
@@ -76,12 +95,12 @@ function ResumeSection({ section, template }: { section: any; template: string }
     case "experience":
       return (
         <div className={baseClasses}>
-          <h2 className={headerClasses}>{section.title}</h2>
+          <h2 className={headerClasses} style={primaryStyle}>{section.title}</h2>
           <div className={contentClasses}>
             {section.content.experiences?.map((exp: any) => (
               <div key={exp.id} className="mb-4 last:mb-0">
                 <div className="flex justify-between items-start mb-1">
-                  <h3 className="font-semibold text-foreground">{exp.title}</h3>
+                  <h3 className="font-semibold" style={textStyle}>{exp.title}</h3>
                   <span className="text-sm text-muted-foreground">
                     {exp.startDate} - {exp.endDate}
                   </span>
@@ -89,9 +108,13 @@ function ResumeSection({ section, template }: { section: any; template: string }
                 <div className="text-sm text-muted-foreground mb-2">
                   {exp.company} • {exp.location}
                 </div>
-                <p className="text-sm text-foreground leading-relaxed">
-                  {exp.description}
-                </p>
+                <div 
+                  className="text-sm leading-relaxed prose prose-sm max-w-none"
+                  style={textStyle}
+                  dangerouslySetInnerHTML={{ 
+                    __html: exp.description.replace(/\n/g, '<br/>') 
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -101,12 +124,12 @@ function ResumeSection({ section, template }: { section: any; template: string }
     case "education":
       return (
         <div className={baseClasses}>
-          <h2 className={headerClasses}>{section.title}</h2>
+          <h2 className={headerClasses} style={primaryStyle}>{section.title}</h2>
           <div className={contentClasses}>
             {section.content.education?.map((edu: any) => (
               <div key={edu.id} className="mb-4 last:mb-0">
                 <div className="flex justify-between items-start mb-1">
-                  <h3 className="font-semibold text-foreground">{edu.degree}</h3>
+                  <h3 className="font-semibold" style={textStyle}>{edu.degree}</h3>
                   <span className="text-sm text-muted-foreground">
                     {edu.startDate} - {edu.endDate}
                   </span>
@@ -126,33 +149,43 @@ function ResumeSection({ section, template }: { section: any; template: string }
   }
 }
 
-function getTemplateHeaderClasses(template: string) {
+function getTemplateHeaderClasses(template: string, customization: any) {
   const base = "text-lg font-bold pb-2 border-b-2";
   
   switch (template) {
     case "modern":
-      return cn(base, "border-primary text-primary");
+      return cn(base, "border-primary");
     case "classic":
-      return cn(base, "border-foreground text-foreground");
+      return cn(base, "border-foreground");
     case "creative":
-      return cn(base, "border-accent text-accent");
+      return cn(base, "border-accent");
     default:
-      return cn(base, "border-primary text-primary");
+      return cn(base, "border-primary");
   }
 }
 
-export function ResumePreview({ resumeData, template }: ResumePreviewProps) {
+export function ResumePreview({ resumeData, template, customization }: ResumePreviewProps) {
   const { personalInfo, sections } = resumeData;
+  
+  const headerTextStyle = {
+    fontSize: `${customization.fontSize + 8}px`,
+    color: customization.textColor,
+  };
+  
+  const contactTextStyle = {
+    fontSize: `${customization.fontSize - 2}px`,
+    color: customization.textColor,
+  };
 
   return (
     <div className="flex justify-center">
       <Card className="w-[8.5in] min-h-[11in] bg-resume-paper shadow-elegant p-8 print:shadow-none">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl font-bold mb-2" style={headerTextStyle}>
             {personalInfo.fullName}
           </h1>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-wrap justify-center gap-4 text-sm" style={contactTextStyle}>
             <div className="flex items-center gap-1">
               <Mail className="w-4 h-4" />
               {personalInfo.email}
@@ -183,6 +216,7 @@ export function ResumePreview({ resumeData, template }: ResumePreviewProps) {
                 key={section.id}
                 section={section}
                 template={template}
+                customization={customization}
               />
             ))}
         </div>

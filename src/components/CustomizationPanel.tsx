@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Palette } from "lucide-react";
@@ -11,21 +12,6 @@ interface CustomizationPanelProps {
   };
   onCustomizationChange: (key: string, value: any) => void;
 }
-
-const colorOptions = [
-  { name: "Blue", value: "#3B82F6" },
-  { name: "Green", value: "#10B981" },
-  { name: "Purple", value: "#8B5CF6" },
-  { name: "Red", value: "#EF4444" },
-  { name: "Orange", value: "#F59E0B" },
-  { name: "Teal", value: "#14B8A6" },
-];
-
-const textColorOptions = [
-  { name: "Black", value: "#000000" },
-  { name: "Dark Gray", value: "#374151" },
-  { name: "Medium Gray", value: "#6B7280" },
-];
 
 export function CustomizationPanel({ customization, onCustomizationChange }: CustomizationPanelProps) {
   return (
@@ -52,42 +38,26 @@ export function CustomizationPanel({ customization, onCustomizationChange }: Cus
 
         {/* Primary Color */}
         <div>
-          <Label>Primary Color</Label>
-          <div className="grid grid-cols-3 gap-2 mt-2">
-            {colorOptions.map((color) => (
-              <button
-                key={color.value}
-                onClick={() => onCustomizationChange("primaryColor", color.value)}
-                className={`w-full h-8 rounded border-2 transition-all ${
-                  customization.primaryColor === color.value
-                    ? "border-foreground scale-105"
-                    : "border-border hover:border-muted-foreground"
-                }`}
-                style={{ backgroundColor: color.value }}
-                title={color.name}
-              />
-            ))}
-          </div>
+          <Label htmlFor="primaryColor">Primary Color</Label>
+          <Input
+            id="primaryColor"
+            type="color"
+            value={customization.primaryColor}
+            onChange={(e) => onCustomizationChange("primaryColor", e.target.value)}
+            className="h-10 w-full"
+          />
         </div>
 
         {/* Text Color */}
         <div>
-          <Label>Text Color</Label>
-          <div className="grid grid-cols-3 gap-2 mt-2">
-            {textColorOptions.map((color) => (
-              <button
-                key={color.value}
-                onClick={() => onCustomizationChange("textColor", color.value)}
-                className={`w-full h-8 rounded border-2 transition-all ${
-                  customization.textColor === color.value
-                    ? "border-foreground scale-105"
-                    : "border-border hover:border-muted-foreground"
-                }`}
-                style={{ backgroundColor: color.value }}
-                title={color.name}
-              />
-            ))}
-          </div>
+          <Label htmlFor="textColor">Text Color</Label>
+          <Input
+            id="textColor"
+            type="color"
+            value={customization.textColor}
+            onChange={(e) => onCustomizationChange("textColor", e.target.value)}
+            className="h-10 w-full"
+          />
         </div>
       </CardContent>
     </Card>
