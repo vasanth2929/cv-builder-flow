@@ -14,10 +14,7 @@ interface PDFResumeProps {
 // Register fonts
 Font.register({
   family: 'Open Sans',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf' },
-    { src: 'https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVI.ttf', fontWeight: 600 }
-  ]
+  src: 'https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf'
 });
 
 export function PDFResume({ resumeData, template, customization }: PDFResumeProps) {
@@ -38,7 +35,7 @@ export function PDFResume({ resumeData, template, customization }: PDFResumeProp
     },
     name: {
       fontSize: fontSize + 8,
-      fontWeight: 600,
+      fontWeight: 'bold',
       marginBottom: 8,
       color: textColor,
     },
@@ -59,7 +56,7 @@ export function PDFResume({ resumeData, template, customization }: PDFResumeProp
     },
     sectionTitle: {
       fontSize: fontSize + 2,
-      fontWeight: 600,
+      fontWeight: 'bold',
       color: primaryColor,
       borderBottomWidth: 2,
       borderBottomColor: primaryColor,
@@ -87,7 +84,7 @@ export function PDFResume({ resumeData, template, customization }: PDFResumeProp
       marginBottom: 4,
     },
     jobTitle: {
-      fontWeight: 600,
+      fontWeight: 'bold',
       fontSize: fontSize,
       color: textColor,
     },
