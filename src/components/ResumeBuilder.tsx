@@ -67,6 +67,11 @@ const initialResumeData: ResumeData = {
 export function ResumeBuilder() {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [selectedTemplate, setSelectedTemplate] = useState("modern");
+  const [customization, setCustomization] = useState({
+    fontSize: 12,
+    primaryColor: "#3B82F6",
+    textColor: "#000000",
+  });
   
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -134,6 +139,10 @@ export function ResumeBuilder() {
     }));
   };
 
+  const handleCustomizationChange = (key: string, value: any) => {
+    setCustomization(prev => ({ ...prev, [key]: value }));
+  };
+
   const sectionIds = resumeData.sections.map(section => section.id);
 
   return (
@@ -151,6 +160,8 @@ export function ResumeBuilder() {
             onRemoveSkill={removeSkill}
             selectedTemplate={selectedTemplate}
             onTemplateChange={setSelectedTemplate}
+            customization={customization}
+            onCustomizationChange={handleCustomizationChange}
           />
           
           <div className="flex-1 p-6">

@@ -9,6 +9,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, X, Download, Palette } from "lucide-react";
 import { ResumeData } from "../types/resume";
 import { TemplateSelector } from "./TemplateSelector";
+import { CustomizationPanel } from "./CustomizationPanel";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFResume } from "./PDFResume";
 
 interface ResumeSidebarProps {
   resumeData: ResumeData;
@@ -17,6 +20,12 @@ interface ResumeSidebarProps {
   onRemoveSkill: (skill: string) => void;
   selectedTemplate: string;
   onTemplateChange: (template: string) => void;
+  customization: {
+    fontSize: number;
+    primaryColor: string;
+    textColor: string;
+  };
+  onCustomizationChange: (key: string, value: any) => void;
 }
 
 export function ResumeSidebar({
@@ -26,6 +35,8 @@ export function ResumeSidebar({
   onRemoveSkill,
   selectedTemplate,
   onTemplateChange,
+  customization,
+  onCustomizationChange,
 }: ResumeSidebarProps) {
   const [newSkill, setNewSkill] = useState("");
 
@@ -58,9 +69,10 @@ export function ResumeSidebar({
       <ScrollArea className="h-[calc(100vh-80px)]">
         <div className="p-4">
           <Tabs defaultValue="content" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="content">Content</TabsTrigger>
               <TabsTrigger value="design">Design</TabsTrigger>
+              <TabsTrigger value="export">Export</TabsTrigger>
             </TabsList>
 
             <TabsContent value="content" className="mt-4 space-y-6">
@@ -166,16 +178,46 @@ export function ResumeSidebar({
                   />
                 </CardContent>
               </Card>
+
+              {/* Customization */}
+              <CustomizationPanel
+                customization={customization}
+                onCustomizationChange={onCustomizationChange}
+              />
+            </TabsContent>
+
+            <TabsContent value="export" className="mt-4 space-y-6">
+              {/* PDF Export */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Download className="w-4 h-4" />
+                    Export Options
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <PDFDownloadLink
+                    document={
+                      <PDFResume
+                        resumeData={resumeData}
+                        template={selectedTemplate}
+                        customization={customization}
+                      />
+                    }
+                    fileName={`${resumeData.personalInfo.fullName.replace(/\s+/g, '_')}_Resume.pdf`}
+                  >
+                    {({ loading }) => (
+                      <Button className="w-full" variant="hero" size="lg" disabled={loading}>
+                        <Download className="w-4 h-4" />
+                        {loading ? 'Generating PDF...' : 'Download PDF'}
+                      </Button>
+                    )}
+                  </PDFDownloadLink>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
 
-          {/* Export Button */}
-          <div className="mt-6">
-            <Button className="w-full" variant="hero" size="lg">
-              <Download className="w-4 h-4" />
-              Export PDF
-            </Button>
-          </div>
         </div>
       </ScrollArea>
     </div>
