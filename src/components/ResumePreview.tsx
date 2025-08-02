@@ -5,6 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Mail, Phone, MapPin, Globe } from "lucide-react";
 import { ResumeData } from "../types/resume";
 import { cn } from "@/lib/utils";
+import { markdownToHtml } from "@/lib/markdown";
 
 interface ResumePreviewProps {
   resumeData: ResumeData;
@@ -78,6 +79,20 @@ function ResumeSection({ section, template, customization }: { section: any; tem
   };
 
   switch (section.type) {
+    case "summary":
+      return (
+        <div className={baseClasses}>
+          <h2 className={headerClasses} style={primaryStyle}>{section.title}</h2>
+          <div 
+            className={cn(contentClasses, "text-sm leading-relaxed prose prose-sm max-w-none")}
+            style={textStyle}
+            dangerouslySetInnerHTML={{ 
+              __html: section.content.summary?.replace(/\n/g, '<br/>') || ""
+            }}
+          />
+        </div>
+      );
+
     case "skills":
       return (
         <div className={baseClasses}>
@@ -112,7 +127,7 @@ function ResumeSection({ section, template, customization }: { section: any; tem
                   className="text-sm leading-relaxed prose prose-sm max-w-none"
                   style={textStyle}
                   dangerouslySetInnerHTML={{ 
-                    __html: exp.description.replace(/\n/g, '<br/>') 
+                    __html: markdownToHtml(exp.description)
                   }}
                 />
               </div>
@@ -178,14 +193,14 @@ export function ResumePreview({ resumeData, template, customization }: ResumePre
   };
 
   return (
-    <div className="flex justify-center">
-      <Card className="w-[8.5in] min-h-[11in] bg-resume-paper shadow-elegant p-8 print:shadow-none">
+    <div className="flex justify-center p-4">
+      <Card className="w-full max-w-[8.5in] min-h-[11in] bg-resume-paper shadow-elegant p-4 md:p-8 print:shadow-none">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-2" style={headerTextStyle}>
             {personalInfo.fullName}
           </h1>
-          <div className="flex flex-wrap justify-center gap-4 text-sm" style={contactTextStyle}>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-xs md:text-sm" style={contactTextStyle}>
             <div className="flex items-center gap-1">
               <Mail className="w-4 h-4" />
               {personalInfo.email}

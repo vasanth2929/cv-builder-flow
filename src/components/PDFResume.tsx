@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import { ResumeData } from '../types/resume';
+import { markdownToPlainText } from '../lib/markdown';
 
 interface PDFResumeProps {
   resumeData: ResumeData;
@@ -102,10 +103,23 @@ export function PDFResume({ resumeData, template, customization }: PDFResumeProp
       lineHeight: 1.4,
       color: textColor,
     },
+    text: {
+      fontSize: fontSize,
+      lineHeight: 1.4,
+      color: textColor,
+    },
   });
 
   const renderSection = (section: any) => {
     switch (section.type) {
+      case 'summary':
+        return (
+          <View style={styles.section} key={section.id}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+            <Text style={styles.text}>{section.content.summary}</Text>
+          </View>
+        );
+
       case 'skills':
         return (
           <View style={styles.section} key={section.id}>
@@ -133,7 +147,7 @@ export function PDFResume({ resumeData, template, customization }: PDFResumeProp
                 <Text style={styles.companyInfo}>
                   {exp.company} • {exp.location}
                 </Text>
-                <Text style={styles.description}>{exp.description}</Text>
+                <Text style={styles.description}>{markdownToPlainText(exp.description)}</Text>
               </View>
             ))}
           </View>

@@ -15,10 +15,19 @@ const initialResumeData: ResumeData = {
   },
   sections: [
     {
+      id: "summary",
+      type: "summary" as SectionType,
+      title: "Professional Summary",
+      order: 0,
+      content: {
+        summary: "Experienced software engineer with a passion for creating innovative solutions and leading development teams."
+      }
+    },
+    {
       id: "skills",
       type: "skills" as SectionType,
       title: "Skills",
-      order: 0,
+      order: 1,
       content: {
         skills: ["JavaScript", "React", "TypeScript", "Node.js", "Python"]
       }
@@ -27,7 +36,7 @@ const initialResumeData: ResumeData = {
       id: "experience",
       type: "experience" as SectionType,
       title: "Work Experience",
-      order: 1,
+      order: 2,
       content: {
         experiences: [
           {
@@ -46,7 +55,7 @@ const initialResumeData: ResumeData = {
       id: "education",
       type: "education" as SectionType,
       title: "Education",
-      order: 2,
+      order: 3,
       content: {
         education: [
           {
@@ -164,7 +173,7 @@ export function ResumeBuilder() {
             onCustomizationChange={handleCustomizationChange}
           />
           
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-2 md:p-6 overflow-auto">
             <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
               <ResumePreview 
                 resumeData={resumeData}

@@ -152,6 +152,29 @@ export function ResumeSidebar({
                 </CardContent>
               </Card>
 
+              {/* Summary Management */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Professional Summary</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <textarea
+                    className="w-full h-24 p-3 border rounded-md resize-none text-sm"
+                    placeholder="Write a brief professional summary..."
+                    value={resumeData.sections.find(s => s.type === "summary")?.content.summary || ""}
+                    onChange={(e) => {
+                      onUpdateData({
+                        sections: resumeData.sections.map(section => 
+                          section.type === "summary" 
+                            ? { ...section, content: { ...section.content, summary: e.target.value } }
+                            : section
+                        )
+                      });
+                    }}
+                  />
+                </CardContent>
+              </Card>
+
               {/* Skills Management */}
               <Card>
                 <CardHeader>

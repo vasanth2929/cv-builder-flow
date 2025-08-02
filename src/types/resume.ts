@@ -1,4 +1,4 @@
-export type SectionType = "skills" | "experience" | "education" | "projects" | "certifications";
+export type SectionType = "summary" | "skills" | "experience" | "education" | "projects" | "certifications";
 
 export interface PersonalInfo {
   fullName: string;
@@ -51,6 +51,7 @@ export interface ResumeSection {
   title: string;
   order: number;
   content: {
+    summary?: string;
     skills?: string[];
     experiences?: Experience[];
     education?: Education[];
