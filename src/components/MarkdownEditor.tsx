@@ -24,7 +24,7 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
         onChange={handleChange}
         preview="edit"
         hideToolbar={false}
-        height={200}
+        height={300}
         data-color-mode="light"
         visibleDragbar={false}
       />

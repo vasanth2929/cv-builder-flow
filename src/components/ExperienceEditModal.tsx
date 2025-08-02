@@ -75,7 +75,7 @@ export function ExperienceEditModal({ experiences, onUpdate }: ExperienceEditMod
           Edit Experience
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Manage Work Experience</DialogTitle>
         </DialogHeader>
@@ -192,13 +192,15 @@ export function ExperienceEditModal({ experiences, onUpdate }: ExperienceEditMod
                   </div>
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="description">Description (Markdown supported)</Label>
-                  <MarkdownEditor
-                    value={formData.description || ""}
-                    onChange={(value) => handleFieldChange("description", value)}
-                    placeholder="Led development of React applications and mentored junior developers..."
-                  />
+                  <div className="border rounded-md">
+                    <MarkdownEditor
+                      value={formData.description || ""}
+                      onChange={(value) => handleFieldChange("description", value)}
+                      placeholder="Led development of React applications and mentored junior developers..."
+                    />
+                  </div>
                 </div>
 
                 <div className="flex gap-2 pt-4">
